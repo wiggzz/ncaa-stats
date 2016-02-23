@@ -2,12 +2,14 @@
 
 let express = require('express'),
   teams = require('./controller/teams'),
-  schedule = require('./controller/schedule');
+  schedule = require('./controller/schedule'),
+  config = require('config');
 
 var app = express();
 
 app.get('/teams', teams);
 app.get('/teams/:id/schedule', schedule);
 
-console.log('Listening on localhost:3000 ...');
-app.listen(3000);
+let port = config.get('port');
+console.log(`Listening on localhost:${port} ...`);
+app.listen(port);
