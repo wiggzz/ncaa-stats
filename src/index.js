@@ -10,6 +10,7 @@ var app = express();
 app.get('/teams', teams);
 app.get('/teams/:id/schedule', schedule);
 
-let port = config.get('port');
-console.log(`Listening on localhost:${port} ...`);
-app.listen(port);
+let port = process.env.PORT || 3000;
+app.listen(port, function() {
+  console.log(`Listening on localhost:${port} ...`);
+});
