@@ -26,71 +26,91 @@ describe('extract team from element', () => {
   });
 });
 
-describe('extract an opponent from element', () => {
+describe('extract a game from element', () => {
   describe('given an href element for an away game', () => {
-    var opponent;
+    var game;
 
     beforeEach(() => {
-      let $ = cheerio.load('<a href="/team/386/12380">@ Marist </a>');
+      let $ = cheerio.load('<span><a href="/team/386/12380">@ Marist </a></span>');
 
-      opponent = elementMatchers.extractOpponentFromElement($('a'));
+      game = elementMatchers.extractGameFromElement($('span'));
     });
 
     it('should extract team id if it exists in the href', () => {
-      expect(opponent.id).to.equal(386);
+      expect(game.opponent.id).to.equal(386);
     });
 
     it('should extract name and strip padding', () => {
-      expect(opponent.name).to.equal('Marist');
+      expect(game.opponent.name).to.equal('Marist');
     });
 
     it('should extract game location', () => {
-      expect(opponent.location.type).to.equal('away');
+      expect(game.location.type).to.equal('away');
     });
   });
 
   describe('given a text element for a home game', () => {
-    var opponent;
+    var game;
 
     beforeEach(() => {
       let $ = cheerio.load('<span> Marist </span>');
 
-      opponent = elementMatchers.extractOpponentFromElement($('span'));
+      game = elementMatchers.extractGameFromElement($('span'));
     });
 
     it('should extract null team id', () => {
-      expect(opponent.id).to.be.null;
+      expect(game.opponent.id).to.be.null;
     });
 
     it('should extract name and strip padding', () => {
-      expect(opponent.name).to.equal('Marist');
+      expect(game.opponent.name).to.equal('Marist');
     });
 
     it('should extract game location', () => {
-      expect(opponent.location.type).to.equal('home');
+      expect(game.location.type).to.equal('home');
     });
   });
 
   describe('given a text element for a neutral site game', () => {
-    var opponent;
+    var game;
 
     beforeEach(() => {
       let $ = cheerio.load('<span> Marist @ Denver, CO</span>');
 
-      opponent = elementMatchers.extractOpponentFromElement($('span'));
+      game = elementMatchers.extractGameFromElement($('span'));
     });
 
     it('should extract null team id', () => {
-      expect(opponent.id).to.be.null;
+      expect(game.opponent.id).to.be.null;
     });
 
     it('should extract name and strip padding', () => {
-      expect(opponent.name).to.equal('Marist');
+      expect(game.opponent.name).to.equal('Marist');
     });
 
     it('should extract game location', () => {
-      expect(opponent.location.type).to.equal('neutral');
-      expect(opponent.location.name).to.equal('Denver, CO');
+      expect(game.location.type).to.equal('neutral');
+      expect(game.location.name).to.equal('Denver, CO');
     });
-  })
+  });
+});
+
+describe('extract a game result from element', () => {
+  describe('a game without overtimes', () => {
+    var result;
+
+    beforeEach(() => {
+      let $ = cheerio.load('<span><a href="/game/index/4011345?org_id=721" class="skipMask" target="TEAM_WIN">L 9 - 10 </a></span>');
+
+      result = elementMatchers.extractResultFromElement($('span'));
+    });
+
+    it('should extract the pointsFor', () => {
+      expect(result.pointsFor).to.equal(9);
+    });
+
+    it('should extract the pointsAgainst', () => {
+      expect(result.pointsAgainst).to.equal(10);
+    });
+  });
 });

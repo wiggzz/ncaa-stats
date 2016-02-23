@@ -20,7 +20,13 @@ describe('schedule html to json', () => {
   });
 
   it('should extract each opponent', () => {
+    expect(data[0].opponent.id).to.equal(726);
     expect(data[0].opponent.name).to.equal('Navy');
-    expect(data[0].opponent.location.type).to.equal('away');
+    expect(data[0].location.type).to.equal('away');
+  });
+
+  it('should extract each result', () => {
+    expect(data[0].result.pointsFor).to.equal(6);
+    expect(data[0].result.pointsAgainst).to.equal(10);
   });
 });

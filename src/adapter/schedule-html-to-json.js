@@ -8,11 +8,9 @@ module.exports = function scheduleHtmlToJson(html) {
 
   return $('.mytable').first().find('tr').has('.smtext').map((index, row) => {
     var cols = $(row).children();
-    var date = new Date(cols.first().text());
-    var opponent = elementMatchers.extractOpponentFromElement(cols.eq(1))
-    return {
-      date,
-      opponent
-    };
+    var game = elementMatchers.extractGameFromElement(cols.eq(1));
+    game.date = new Date(cols.eq(0).text());
+    game.result = elementMatchers.extractResultFromElement(cols.eq(2));
+    return game;
   }).get();
 }
