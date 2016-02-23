@@ -18,7 +18,7 @@ To kick off the server on the default port, run
 npm start
 ```
 
-Then hit http://localhost:3000/teams in your browser to see the team list.
+Then hit [http://localhost:3000/teams](http://localhost:3000/teams) in your browser to see the team list.
 
 # development
 
