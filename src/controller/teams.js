@@ -1,11 +1,18 @@
 'use strict';
 
 let teamsHtmlToJson = require('../adapter/teams-html-to-json'),
-  getTeamsHtmlFromNCAA = require('../service/get-teams-html-from-ncaa');
+  getTeamsHtmlFromNCAA = require('../service/get-teams-html-from-ncaa'),
+  memoize = require('../util/memoize');
+
+function rawGetTeams() {
+  return getTeamsHtmlFromNCAA()
+    .then(teamsHtmlToJson);
+}
+
+var memoizedGetTeams = memoize(rawGetTeams);
 
 module.exports = function teams(req, res) {
-  return getTeamsHtmlFromNCAA()
-    .then(teamsHtmlToJson)
+  return memoizedGetTeams()
     .then(teams => {
       res.json({teams});
     })
