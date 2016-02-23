@@ -1,22 +1,34 @@
 'use strict';
 
-let chai = require('chai'),
-  chaiAsPromised = require('chai-as-promised'),
+let nock = require('nock'),
   fixtures = require('../fixtures'),
-  nock = require('nock'),
-  getTeamsHtmlFromNCAA = require('../../src/service/get-teams-html-from-ncaa');
+  getTeamsHtmlFromNCAA = require('../../src/service/get-teams-html-from-ncaa'),
+  getScheduleHTMLFromNcaa = require('../../src/service/get-schedule-html-from-ncaa');
 
-chai.use(chaiAsPromised);
-let expect = chai.expect;
+let expect = fixtures.expect;
 
 describe('teams-service', () => {
-  beforeEach(() => {
-    nock('http://stats.ncaa.org').get(/\/team\/inst_team_list.*/).reply(200, fixtures.teamList);
+  describe('getTeamsHtmlFromNCAA', () => {
+    beforeEach(() => {
+      nock('http://stats.ncaa.org').get(/\/team\/inst_team_list.*/).reply(200, fixtures.teamList);
+    });
+
+    it('should return an html document', () => {
+      let htmlPromise = getTeamsHtmlFromNCAA();
+
+      return expect(htmlPromise).to.eventually.be.a('string');
+    });
   });
 
-  it('should return an html document', () => {
-    let htmlPromise = getTeamsHtmlFromNCAA();
+  describe('getScheduleHTMLFromNcaa', () => {
+    beforeEach(() => {
+      nock('http://stats.ncaa.org').get(/\/team\/\d+\/\d+/).reply(200, fixtures.schedule);
+    });
 
-    return expect(htmlPromise).to.eventually.be.a('string');
+    it('should return an html document', () => {
+      let htmlPromise = getScheduleHTMLFromNcaa(721);
+
+      return expect(htmlPromise).to.eventually.be.a('string');
+    });
   });
 });

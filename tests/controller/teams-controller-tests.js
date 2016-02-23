@@ -1,8 +1,10 @@
 'use strict';
 
-let expect = require('chai').expect,
-  fixtures = require('../fixtures'),
+
+let fixtures = require('../fixtures'),
   sinon = require('sinon');
+
+let expect = fixtures.expect;
 
 describe('teams-controller', () => {
 

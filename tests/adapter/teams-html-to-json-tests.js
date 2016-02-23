@@ -1,8 +1,9 @@
 'use strict';
 
-let expect = require('chai').expect,
-  teamsHtmlToJson = require('../../src/adapter/teams-html-to-json'),
-  fixtures = require('../fixtures');
+let fixtures = require('../fixtures.js'),
+  teamsHtmlToJson = require('../../src/adapter/teams-html-to-json');
+
+let expect = fixtures.expect;
 
 describe('teams html to json', () => {
   var data;
