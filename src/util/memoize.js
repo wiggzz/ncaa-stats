@@ -1,5 +1,4 @@
-var memoizee = require('memoizee'),
-  promisify = require('es6-promisify');
+var memoizee = require('memoizee');
 
 
 function memoize(fn) {
