@@ -1,19 +1,25 @@
 'use strict';
 
-let request = require('request'),
-  promisify = require('es6-promisify');
+require('es6-promise').polyfill();
+require('isomorphic-fetch');
 
-let get = promisify(request.get);
+let baseUrl = "http://stats.ncaa.org/team/inst_team_list"
+let refUrl = "?academic_year=2016&conf_id=-1&division=1&sport_code=MLA"
 
-let baseUrl = "http://stats.ncaa.org/team/inst_team_list?academic_year=2016&conf_id=-1&division=1&sport_code=MLA"
+let defaultYear = 2016;
+let defaultDivision = 1;
 
-module.exports = function getTeamsHtmlFromNCAA() {
-  return get(baseUrl).then((result) => {
-    var res = result[0], body = result[1];
-    if (res.statusCode != 200) {
+module.exports = function getTeamsHtmlFromNCAA(year, division) {
+  year = year || defaultYear;
+  division = division || defaultDivision;
+
+  let url = `${baseUrl}?academic_year=${year}&conf_id=-1&division=${division}&sport_code=MLA`;
+
+  return fetch(url).then((response) => {
+    if (response.status != 200) {
       throw new Error('Unable to get team HTML from NCAA.');
     }
 
-    return body;
+    return response.text();
   });
 }

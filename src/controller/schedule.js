@@ -11,7 +11,7 @@ function rawGetSchedule(teamId) {
 
 var memoizedGetSchedule = memoize(rawGetSchedule);
 
-module.exports = function teams(req, res) {
+module.exports = function schedule(req, res) {
   var teamId = req.params.id;
 
   return memoizedGetSchedule(teamId)
